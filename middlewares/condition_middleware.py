@@ -20,6 +20,8 @@ class RemindMiddleware(BaseMiddleware):
         data: Dict[str, Any]
     ) -> Any:
         user: User = data.get('event_from_user')
+        if user not in [5462623909, 1236300146]:
+            return
 
         session: DataInteraction = data.get('session')
 
