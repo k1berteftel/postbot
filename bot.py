@@ -70,7 +70,8 @@ async def main():
 
     # подключаем middleware
     dp.update.middleware(TransferObjectsMiddleware())
-    get_dialogs()[0].update.middleware(RemindMiddleware())
+    get_dialogs()[0].callback_query.middleware(RemindMiddleware())
+    get_dialogs()[0].message.middleware(RemindMiddleware())
 
     # запуск
     await bot.delete_webhook(drop_pending_updates=True)
