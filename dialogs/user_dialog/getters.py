@@ -36,14 +36,16 @@ async def get_notification_channel(msg: Message, widget: ManagedTextInput, dialo
     channels = text.strip().split('\n')
     warning_channels = []
     for channel in channels:
+        data = channel.strip().split('-')
+        channel, name = data[0].strip(), data[1].strip()
         if channel.startswith('@'):
-            warning_channels.append(channel)
+            warning_channels.append([channel, name])
         if channel.startswith('https') or channel.startswith('t.me'):
-            warning_channels.append('@' + channel.split('/')[-1])
+            warning_channels.append(['@' + channel.split('/')[-1], name])
         try:
             channel = int(channel)
             channel = await msg.bot.get_chat(channel)
-            warning_channels.append('@' + channel.username)
+            warning_channels.append(['@' + channel.username, name])
         except Exception:
             ...
     if not warning_channels:
@@ -121,9 +123,9 @@ async def watch_channels_getter(dialog_manager: DialogManager, **kwargs):
     channels = await session.get_channels()
     text = ''
     for channel in channels:
-        text += f'Канал "{channel.channel}" ({channel.count})'
+        text += f'Канал "{channel.channel}" ({channel.posts}/{channel.count})'
         for warn_channel in channel.warning_channels:
-            text += f'\n - {warn_channel}'
+            text += f'\n - {warn_channel[1]} ({warn_channel[0]})'
         text += '\n\n'
     return {'text': text}
 
@@ -147,9 +149,9 @@ async def change_channel_menu_getter(dialog_manager: DialogManager, **kwargs):
     channel_id = dialog_manager.dialog_data.get('channel_id')
     channel = await session.get_channel(channel_id)
     text = ''
-    text += f'Канал "{channel.channel}" ({channel.count})'
+    text += f'Канал "{channel.channel}" ({channel.posts}/{channel.count})'
     for warn_channel in channel.warning_channels:
-        text += f'\n - {warn_channel}'
+        text += f'\n - {warn_channel[1]} ({warn_channel[0]})'
 
     return {'text': text}
 
@@ -205,14 +207,16 @@ async def get_change_data(msg: Message, widget: ManagedTextInput, dialog_manager
         channels = text.split('\n')
         warning_channels = []
         for channel in channels:
+            collect_data = channel.strip().split('-')
+            channel, name = collect_data[0].strip(), collect_data[1].strip()
             if channel.startswith('@'):
-                warning_channels.append(channel)
+                warning_channels.append([channel, name])
             if channel.startswith('https') or channel.startswith('t.me'):
-                warning_channels.append('@' + channel.split('/')[-1])
+                warning_channels.append(['@' + channel.split('/')[-1], name])
             try:
                 channel = int(channel)
                 channel = await msg.bot.get_chat(channel)
-                warning_channels.append('@' + channel.username)
+                warning_channels.append(['@' + channel.username, name])
             except Exception:
                 ...
         if not warning_channels:

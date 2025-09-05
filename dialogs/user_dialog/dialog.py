@@ -30,9 +30,10 @@ user_dialog = Dialog(
         state=startSG.get_post_channel
     ),
     Window(
-        Const('Введите каналы для контроля\n\nДопустимый '
+        Const('Введите каналы и их названия для контроля\n\nДопустимый '
               'формат ввода (каналы разделяются абзацами):\n'
-              'https://t.me/room_RO (ссылка)\n@room_RO (юзернейм)\n-1001053645184 (ID)'),
+              'https://t.me/room_RO (ссылка) - Название 1\n@room_RO (юзернейм) - Название 2'
+              '\n-1001053645184 (ID) - Название 3'),
         TextInput(
             id='get_notification_channel',
             on_success=getters.get_notification_channel
