@@ -39,7 +39,7 @@ async def send_channel_post(msg: Message, session: DataInteraction, scheduler: A
                 text += (f'🚨В канале {channel.channel} вышло {channel.posts} постов (больше чем {channel.count})'
                          f'\nОстановите публикацию постов в каналах:\n')
                 for warn_channel in channel.warning_channels:
-                    text += f'{warn_channel[0]} ({warn_channel[1]})\n'
+                    text += f'{warn_channel[1]} ({warn_channel[0]})\n'
                 buttons = [[InlineKeyboardButton(text=warn_channel[1], url=f'https://t.me/{warn_channel[0][1::]}')]
                            for warn_channel in channel.warning_channels]
                 buttons.append([InlineKeyboardButton(text='На главное меню', callback_data='menu')])
@@ -51,7 +51,7 @@ async def send_channel_post(msg: Message, session: DataInteraction, scheduler: A
                     )
                 text = 'Остановите публикацию постов в каналах:\n'
                 for warn_channel in channel.warning_channels:
-                    text += f'{warn_channel[0]} ({warn_channel[1]})\n'
+                    text += f'{warn_channel[1]} ({warn_channel[0]})\n'
                 await msg.bot.send_message(
                     chat_id=965916015,
                     text=text,
